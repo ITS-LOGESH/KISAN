@@ -133,29 +133,598 @@ Open `http://localhost:5173` in your browser.
 ---
 
 ## 🌟 Key Modules
+# KISAN — AI-Powered Agricultural Intelligence Platform
 
-### 1. Geospatial India Map & Digital Twin
-Interactive Leaflet map showing demonstration fields across Tamil Nadu, Punjab, Maharashtra, and Karnataka. Select any field to inspect its Digital Twin:
-- Live 2m air temperature, humidity, rainfall probability, and 12-hour hourly forecasts.
-- Genuine Sentinel-2 optical observation with NDVI, NDWI, and cloud cover metrics.
-- Verified Soil Health Card nutrient profiles (pH, N, P, K, Organic Carbon).
+> Real-world data. Field-level intelligence. Multilingual support. Offline access.
 
-### 2. Deterministic Agricultural Risk Engine
-Evaluates Heat Stress, Heavy Rainfall / Waterlogging, Drought Stress, Irrigation Risk, and Vegetation Decline. Each output includes **WHAT**, **WHY (Evidence)**, **DATA USED**, **DATA DATE**, and **LIMITATIONS**. If input data is missing, it displays `CANNOT_DETERMINE` rather than generating arbitrary risk scores.
+KISAN is an AI-powered agricultural intelligence platform designed to help farmers understand and manage their fields using real-world agricultural data.
 
-### 3. Crop Suitability & Regenerative Farming
-- Rule-based suitability assessment for standard Indian crops (Rice, Wheat, Cotton, Millets, Groundnut, Maize).
-- Regenerative module with strict separation between **General Agricultural Principles** and **Field-Specific Recommendations** based on verified soil carbon.
+The platform combines farmer and field information with weather, satellite, soil, crop, risk, advisory, notification, and AI-assisted capabilities in a single field-centric application.
 
-### 4. "Ask My Field" Ground-Truth AI
-Farmers can ask practical questions like *"Should I irrigate today?"* or *"Why is my field at risk?"*. The engine invokes real data tools (`get_weather()`, `get_satellite()`, `get_soil()`, `get_risk()`, `get_advisories()`) before generating an explanation via Gemini Free Tier or a deterministic fallback.
+KISAN is built around the concept of a **Farm Digital Twin**, where each registered field maintains its own agricultural context based on the data available for that field.
 
-### 5. Crop Disease Image Screening
-Allows farmers to upload foliage photographs for visual symptom screening with the mandatory disclaimer:
-> **"AI-assisted screening — not laboratory diagnosis."**
+---
 
-### 6. India Agricultural Intelligence Network
-Demonstrates the cooperation architecture for sharing public datasets, agronomic heuristics, and risk models across Indian states (Tamil Nadu, Punjab, Maharashtra, Karnataka, Andhra Pradesh, Uttar Pradesh) without proprietary lock-in.
+## Problem
+
+Farmers often depend on multiple sources for agricultural decisions, including weather information, satellite data, soil information, crop guidance, disease identification, and risk alerts.
+
+These sources are usually disconnected, making it difficult to understand what the information means for a particular field.
+
+KISAN brings these capabilities together around the farmer's actual field and crop.
+
+---
+
+## What KISAN Provides
+
+KISAN currently provides:
+
+- Farmer registration
+- Field creation and management
+- Crop selection during field setup
+- Farm Digital Twin
+- Geospatial field view
+- Real-world weather information
+- Satellite-based field monitoring
+- Soil information
+- Agricultural risk detection
+- Crop suitability information
+- Regenerative farming guidance
+- Ask My Field AI assistant
+- AI-assisted crop disease screening
+- Agricultural advisories
+- Notifications and alerts
+- Multilingual support
+- Offline-first PWA support
+- Data provenance and transparent data handling
+
+---
+
+# Key Features
+
+## Farmer Registration
+
+Farmers can register and create their agricultural profile before setting up their fields.
+
+The registered farmer context is used throughout the application.
+
+---
+
+## Field Setup and Crop Selection
+
+Farmers can create their fields and provide field information including location and crop.
+
+The farmer selects the crop being cultivated during field setup.
+
+The selected crop becomes the context for crop-specific features such as:
+
+- Disease screening
+- Risk analysis
+- Agricultural advisories
+- Crop suitability
+- Ask My Field
+
+The system does not need to identify the crop species from an uploaded image when the crop has already been registered for the field.
+
+---
+
+## Farm Digital Twin
+
+KISAN creates a digital representation of the farmer's field.
+
+The Farm Digital Twin brings together the available information for a field, including:
+
+- Field location
+- Crop
+- Current weather
+- Weather forecasts
+- Satellite observations
+- Vegetation information
+- Soil information
+- Agricultural risks
+- Advisories
+- Notifications
+
+This allows different modules to work with the same field context.
+
+---
+
+## Geospatial Field View
+
+KISAN provides a map-based field view where agricultural information is associated with the farmer's field location.
+
+The field view can display available information such as:
+
+- Temperature
+- Humidity
+- Rainfall probability
+- Weather forecasts
+- Satellite observations
+- Satellite observation date
+- Cloud coverage
+- NDVI
+- NDWI
+- Soil information
+- Field risks
+
+NDVI and NDWI are shown only when the required satellite data is available.
+
+---
+
+## Multilingual Support
+
+KISAN supports multiple Indian/local languages.
+
+Farmers can use the platform in their selected language.
+
+Multilingual support is integrated across the farmer experience, including:
+
+- User interface
+- Field information
+- Weather information
+- Agricultural advisories
+- Risk information
+- AI responses
+- Disease screening information
+
+The objective is to make agricultural information easier for farmers to understand and use.
+
+---
+
+## Real-World Weather
+
+KISAN uses real-world weather data for the field location.
+
+Weather information includes available data such as:
+
+- Current temperature
+- Humidity
+- Rainfall probability
+- Wind
+- Hourly forecast
+- Multi-day forecast
+
+Weather information is clearly treated according to whether it represents current conditions or a forecast.
+
+---
+
+## Satellite-Based Field Monitoring
+
+KISAN uses real satellite observations where available.
+
+Sentinel-2 satellite data can provide field-level information including:
+
+- Observation date
+- Cloud coverage
+- Spectral information
+- NDVI
+- NDWI
+- Vegetation-related information
+
+The platform does not fabricate satellite values.
+
+If required satellite information is unavailable, the corresponding value is shown as unavailable.
+
+---
+
+## Soil Information
+
+KISAN can maintain soil information associated with the farmer's field.
+
+Available soil information can include:
+
+- Soil pH
+- Nitrogen
+- Phosphorus
+- Potassium
+- Organic Carbon
+- Soil texture
+
+The system distinguishes the source of soil information rather than treating every value as a verified laboratory measurement.
+
+Soil information can be identified as:
+
+- Real documented data
+- User-entered data
+- Modelled/estimated data
+- Unavailable
+
+---
+
+## Agricultural Risk Detection
+
+KISAN includes a deterministic agricultural risk engine.
+
+The current risk categories include:
+
+- Heat Stress
+- Heavy Rainfall / Waterlogging
+- Drought Stress
+- Irrigation Risk
+- Vegetation Decline
+
+The risk engine uses available field, weather, soil, and satellite information where relevant.
+
+Risk results provide the reason and supporting data where available.
+
+When required information is missing, the system does not invent a result and can return:
+
+`CANNOT_DETERMINE`
+
+---
+
+## Crop Suitability
+
+KISAN provides rule-based crop suitability information for supported crops, including:
+
+- Rice
+- Wheat
+- Cotton
+- Millets
+- Groundnut
+- Maize
+
+The suitability information uses available field context and predefined agricultural rules.
+
+---
+
+## Regenerative Farming
+
+KISAN provides regenerative farming guidance.
+
+The platform separates general agricultural principles from recommendations that depend on available field-specific information.
+
+This allows farmers to receive useful agricultural practices without incorrectly presenting generic information as a field measurement.
+
+---
+
+## Ask My Field
+
+**Ask My Field** is KISAN's field-specific AI assistant.
+
+Farmers can ask questions about their own field instead of receiving only generic agricultural answers.
+
+The assistant can retrieve available information through field tools such as:
+
+- `get_field()`
+- `get_weather()`
+- `get_satellite()`
+- `get_soil()`
+- `get_risks()`
+- `get_advisories()`
+
+The retrieved field information is used as context for the AI response.
+
+The assistant can help explain:
+
+- Current field conditions
+- Weather
+- Weather forecasts
+- Satellite information
+- Soil information
+- Agricultural risks
+- Advisories
+
+The AI does not replace the underlying field data or deterministic risk system.
+
+If AI services are unavailable, KISAN uses controlled fallback behavior where applicable.
+
+---
+
+## AI-Assisted Disease Screening
+
+KISAN provides AI-assisted crop image screening.
+
+Farmers can upload a crop image for visual analysis.
+
+Supported formats include:
+
+- PNG
+- JPEG
+- WebP
+
+Maximum image size:
+
+`10 MB`
+
+The crop registered for the field is used as context for the screening.
+
+The feature is intended for preliminary visual screening and does not replace laboratory diagnosis or professional agricultural inspection.
+
+The application clearly states:
+
+> AI-assisted screening — not laboratory diagnosis.
+
+If the AI service is unavailable, the system does not pretend that an analysis was completed.
+
+---
+
+## Agricultural Advisories
+
+KISAN generates agricultural advisories using available field information.
+
+Advisories can consider:
+
+- Crop
+- Field
+- Weather
+- Soil
+- Satellite information
+- Vegetation information
+- Agricultural risks
+
+The platform distinguishes between actual observations, forecasts, modelled information, and AI recommendations.
+
+This allows farmers to understand whether information represents a measured condition, expected future condition, estimated information, or recommendation.
+
+---
+
+## Notifications and Alerts
+
+KISAN provides notifications based on evaluated agricultural risks and advisories.
+
+The notification flow connects:
+
+**Risk → Advisory → Notification → Farmer**
+
+Notifications can inform farmers about important field conditions that may require attention.
+
+The system separates alert evaluation from simple data retrieval so that every new data update does not automatically become a notification.
+
+---
+
+## Offline-First PWA
+
+KISAN is designed as an offline-first Progressive Web App.
+
+Previously loaded information can be cached so that the application remains useful when internet connectivity is temporarily unavailable.
+
+Offline access can include previously cached:
+
+- Application resources
+- Field information
+- Weather information
+- Agricultural information
+
+Features requiring new external data continue to require internet connectivity, including:
+
+- New weather data
+- New satellite data
+- Cloud AI requests
+- Disease image analysis
+
+Cached information is not treated as newly retrieved live information.
+
+---
+
+# Data Handling and Provenance
+
+KISAN follows a real-data-first and no-fabrication approach.
+
+The platform distinguishes different types of information.
+
+### Observed / Measured
+
+Information obtained from an actual observation, measurement, or documented record.
+
+### Forecast
+
+Information representing an expected future condition.
+
+### Modelled / Estimated
+
+Information generated through an estimation or modelling process.
+
+### AI Recommendation
+
+Guidance generated or explained with AI assistance.
+
+### Unavailable
+
+Information that could not be obtained or cannot be reliably determined.
+
+The system does not replace missing weather, satellite, soil, or field information with fabricated values.
+
+---
+
+# AI + Deterministic Intelligence
+
+KISAN uses both deterministic agricultural logic and AI.
+
+### Deterministic Intelligence
+
+Used for:
+
+- Risk detection
+- Data validation
+- Agricultural rules
+- Advisory logic
+- Alert evaluation
+- Missing-data handling
+
+### AI
+
+Used for:
+
+- Ask My Field
+- Natural-language agricultural explanations
+- Multilingual AI assistance
+- Crop image screening
+
+The basic approach is:
+
+**Real Data → Validation → Agricultural Intelligence → AI-Assisted Explanation**
+
+This keeps the underlying agricultural information separate from AI-generated explanations.
+
+---
+
+# Real-World Data Sources
+
+KISAN is designed to use real-world data wherever possible.
+
+### Weather
+
+**Open-Meteo**
+
+Used for weather and forecast information.
+
+### Satellite
+
+**Sentinel-2 / Copernicus**
+
+Used for real satellite observations and vegetation-related analysis.
+
+### Geospatial and Agricultural Information
+
+The platform can work with relevant Indian public agricultural and geospatial resources where available, including resources such as:
+
+- ISRO Bhuvan
+- Indian government open-data resources
+- Agricultural datasets
+- Documented soil information
+
+Data availability depends on the specific source and location.
+
+---
+
+# Data Reliability Principles
+
+KISAN follows these principles:
+
+1. **No fabricated live data**
+2. **Explicit missing-data handling**
+3. **Data provenance**
+4. **Field-specific context**
+5. **Deterministic risk evaluation**
+6. **AI-assisted explanations**
+7. **Graceful external API failures**
+8. **No false certainty**
+
+If required information is unavailable, KISAN communicates that limitation instead of generating a plausible-looking value.
+
+---
+
+# Data Handling
+
+KISAN handles different types of information separately.
+
+### Farmer Data
+
+May include:
+
+- Farmer profile
+- Field information
+- Crop selection
+- User-provided agricultural information
+
+### External Data
+
+May include:
+
+- Weather
+- Satellite observations
+- Geospatial information
+- Public agricultural information
+
+### AI Data
+
+AI-generated responses are treated as AI-generated explanations or recommendations.
+
+### Uploaded Images
+
+Crop images submitted for disease screening are validated before processing.
+
+### Cached Data
+
+Previously retrieved information may be stored locally for offline access.
+
+Cached information retains its original context rather than being represented as new live data.
+
+---
+
+# Testing and Validation
+
+KISAN has been validated through automated and integration testing.
+
+Current validation includes:
+
+- 44 backend tests passed
+- Production database preserved during testing
+- Alert evaluation separated from retrieval
+- Offline functionality tested
+- Offline AI behavior tested
+- Online/offline end-to-end behavior tested
+- Frontend production build tested successfully
+
+The backend has been kept stable while the frontend integrates with the existing APIs.
+
+---
+
+# Technology Stack
+
+### Frontend
+
+- React
+- Vite
+- Progressive Web App
+- Leaflet
+
+### Backend
+
+- Python
+- FastAPI
+- REST APIs
+
+### Data Processing
+
+- Pandas
+- NumPy
+- GeoPandas
+- Scikit-learn
+
+### Database
+
+- SQLite
+
+### AI
+
+- Gemini API
+
+### Weather
+
+- Open-Meteo
+
+### Satellite
+
+- Sentinel-2 / Copernicus
+
+### Development
+
+- Git
+- GitHub
+- VS Code
+
+---
+
+# Project Structure
+
+```text
+KISAN/
+│
+├── .gitignore
+├── README.md
+│
+├── backend/
+│
+├── frontend/
+│
+├── docs/
+│
+└── scratch/
+
+
+.
 
 ---
 
