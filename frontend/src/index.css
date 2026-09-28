@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import 'leaflet/dist/leaflet.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color-scheme: light;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #FAF8F4;
+  color: #1C1510;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom leaflet map fixes and styling */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  z-index: 10;
+}
+
+.leaflet-control-zoom {
+  border: 1px solid rgba(232, 226, 216, 0.8) !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(28, 21, 16, 0.08) !important;
+}
+
+.leaflet-control-zoom a {
+  background-color: #FFFFFF !important;
+  color: #1C1510 !important;
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FAF8F4;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D5C2AD;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #BBA084;
+}
+
+/* Depth & perspective classes */
+.perspective-container {
+  perspective: 1000px;
+}
+
+.card-tactile {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+
+.card-tactile:hover {
+  transform: translateY(-2px);
+}
+
+/* Atmospheric weather rain animation */
+@keyframes rain-fall {
+  0% { transform: translateY(-10px); opacity: 0; }
+  50% { opacity: 0.8; }
+  100% { transform: translateY(18px); opacity: 0; }
+}
+
+.animate-rain-drop-1 {
+  animation: rain-fall 1.2s infinite linear;
+}
+.animate-rain-drop-2 {
+  animation: rain-fall 1.5s infinite linear 0.3s;
+}
+.animate-rain-drop-3 {
+  animation: rain-fall 1.3s infinite linear 0.6s;
+}
+
+/* Gentle pulse for live indicators */
+@keyframes natural-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: 0.8; }
+}
+
+.animate-natural-pulse {
+  animation: natural-pulse 3s ease-in-out infinite;
+}

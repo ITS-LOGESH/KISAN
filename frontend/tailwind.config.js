@@ -1,0 +1,87 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        serif: ['Fraunces', 'Georgia', 'serif'],
+        sans: ['"Plus Jakarta Sans"', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+      },
+      colors: {
+        soil: {
+          50: '#FAF8F5',
+          100: '#F4EDE4',
+          200: '#E8DC CE',
+          300: '#D5C2AD',
+          400: '#BBA084',
+          500: '#8C6B4E',
+          600: '#5C4535',
+          700: '#443327',
+          800: '#292019',
+          900: '#1C1510',
+          950: '#0E0A08',
+        },
+        moss: {
+          50: '#F2FAF6',
+          100: '#E1F6EF',
+          200: '#BEE9DC',
+          300: '#8AD5C1',
+          400: '#5EBFA4',
+          500: '#349377',
+          600: '#25745E',
+          700: '#1D5A49',
+          800: '#164337',
+          900: '#0F2F26',
+          950: '#081C17',
+        },
+        harvest: {
+          50: '#FFFDF5',
+          100: '#FEF8E7',
+          200: '#FDEEC4',
+          300: '#FBDD97',
+          400: '#F7C664',
+          500: '#E8A735',
+          600: '#C78520',
+          700: '#9E6215',
+          800: '#7E4B14',
+          900: '#673D14',
+          950: '#3A1F07',
+        },
+        canvas: {
+          50: '#FFFFFF',
+          100: '#FAF8F4',
+          200: '#F4EFEB',
+          300: '#ECE5DD',
+          400: '#DDD3C7',
+          500: '#C8BCAD',
+          border: '#E8E2D8',
+          card: '#FFFFFF',
+        },
+        agri: {
+          50: '#f0fdf4',
+          100: '#dcfce7',
+          200: '#bbf7d0',
+          300: '#86efac',
+          400: '#4ade80',
+          500: '#22c55e',
+          600: '#16a34a',
+          700: '#15803d',
+          800: '#166534',
+          900: '#14532d',
+          950: '#052e16',
+        }
+      },
+      boxShadow: {
+        'subtle': '0 1px 2px 0 rgba(28, 21, 16, 0.05)',
+        'elevated': '0 4px 20px -2px rgba(28, 21, 16, 0.08), 0 2px 6px -2px rgba(28, 21, 16, 0.04)',
+        'floating': '0 12px 32px -4px rgba(28, 21, 16, 0.12), 0 4px 12px -2px rgba(28, 21, 16, 0.06)',
+        'field': '0 20px 40px -8px rgba(15, 47, 38, 0.18), 0 6px 16px -4px rgba(15, 47, 38, 0.08)',
+      }
+    },
+  },
+  plugins: [],
+}
