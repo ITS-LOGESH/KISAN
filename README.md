@@ -727,7 +727,7 @@ KISAN/
 .
 
 ---
-
+```
 ## 🧪 Testing
 
 KrishiNet includes a comprehensive test suite covering API endpoints, weather fallbacks, and deterministic risk logic:
