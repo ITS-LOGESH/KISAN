@@ -1,4 +1,5 @@
 import time
+import asyncio
 import httpx
 import logging
 from abc import ABC, abstractmethod
@@ -46,13 +47,16 @@ class OpenMeteoProvider(WeatherProvider):
     """
     Open-Meteo Weather API Provider.
     Zero-cost, non-commercial public API. No API key required.
-    Includes in-memory cache to respect rate limits and reduce redundant calls.
+    Includes in-memory cache, in-flight request deduplication, and rate-limit cooldown.
     """
     
-    def __init__(self, cache_ttl_seconds: int = 900): # 15 min cache
+    def __init__(self, cache_ttl_seconds: int = 3600, cooldown_seconds: int = 60): # 1 hour cache, 60s 429 cooldown
         self.base_url = settings.OPEN_METEO_BASE_URL
         self.cache: Dict[str, Dict[str, Any]] = {}
         self.cache_ttl = cache_ttl_seconds
+        self.cooldown_seconds = cooldown_seconds
+        self.cooldowns: Dict[str, float] = {}
+        self._in_flight: Dict[str, asyncio.Task] = {}
 
     def _cache_key(self, lat: float, lon: float) -> str:
         return f"{round(lat, 3)}:{round(lon, 3)}"
@@ -65,7 +69,7 @@ class OpenMeteoProvider(WeatherProvider):
         key = self._cache_key(latitude, longitude)
         now = time.time()
         
-        # Check cache for fresh entry
+        # 1. Check cache for fresh entry
         if key in self.cache:
             entry = self.cache[key]
             if now - entry["timestamp"] < self.cache_ttl:
@@ -74,6 +78,41 @@ class OpenMeteoProvider(WeatherProvider):
                 cached_data["cache_status"] = "FRESH"
                 return cached_data
 
+        # 2. Check HTTP 429 cooldown for this location
+        if key in self.cooldowns:
+            if now < self.cooldowns[key]:
+                logger.info(f"Open-Meteo cooldown active for {key}. Skipping network request.")
+                if key in self.cache:
+                    stale = dict(self.cache[key]["data"])
+                    stale["status"] = "CACHED"
+                    stale["cache_status"] = "STALE"
+                    return stale
+                return self._fallback_unavailable("Open-Meteo rate limit reached. Please wait a moment.")
+            else:
+                del self.cooldowns[key]
+
+        # 3. In-flight request deduplication (Single-flight)
+        if key in self._in_flight:
+            logger.debug(f"Awaiting existing in-flight weather request for {key}")
+            res = await self._in_flight[key]
+            return dict(res)
+
+        # Create new in-flight task
+        task = asyncio.create_task(self._fetch_and_cache(key, latitude, longitude))
+        self._in_flight[key] = task
+        try:
+            res = await task
+            return dict(res)
+        finally:
+            self._in_flight.pop(key, None)
+
+    async def _fetch_and_cache(self, key: str, latitude: float, longitude: float) -> Dict[str, Any]:
+        try:
+            return await self._do_fetch(key, latitude, longitude)
+        finally:
+            self._in_flight.pop(key, None)
+
+    async def _do_fetch(self, key: str, latitude: float, longitude: float) -> Dict[str, Any]:
         url = f"{self.base_url}/v1/forecast"
         params = {
             "latitude": latitude,
@@ -85,6 +124,7 @@ class OpenMeteoProvider(WeatherProvider):
             "forecast_days": 7
         }
 
+        now = time.time()
         try:
             async with httpx.AsyncClient(timeout=10.0) as client:
                 response = await client.get(url, params=params)
@@ -100,7 +140,8 @@ class OpenMeteoProvider(WeatherProvider):
                     }
                     return formatted
                 elif response.status_code == 429:
-                    logger.warning("Open-Meteo API rate limit exceeded (HTTP 429).")
+                    logger.warning("Open-Meteo API rate limit exceeded (HTTP 429). Activating cooldown.")
+                    self.cooldowns[key] = now + self.cooldown_seconds
                     if key in self.cache:
                         stale = dict(self.cache[key]["data"])
                         stale["status"] = "CACHED"
